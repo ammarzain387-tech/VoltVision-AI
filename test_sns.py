@@ -7,8 +7,8 @@ TOPIC_ARN = "arn:aws:sns:ap-southeast-2:522688056640:VoltVision-Spark-Alerts"
 sns_client = boto3.client(
     'sns',
     region_name='ap-southeast-2',                   # Matched with ARN region
-    aws_access_key_id='AKIAXTMVCZVAE33ZIR43',        # Paste your Access Key here
-    aws_secret_access_key='lbmV4ByMuK3a0ImtMAmHPg4FdN2NkUm99sfWVCZW'     # Paste your Secret Key here
+    aws_access_key_id='YOUR_AWS_ACCESS_KEY_ID',        # Paste your Access Key here
+    aws_secret_access_key='YOUR_AWS_SECRET_ACCESS_KEY'     # Paste your Secret Key here
 )
 
 def send_test_alert():
