@@ -10,8 +10,8 @@ TOPIC_ARN = "arn:aws:sns:ap-southeast-2:522688056640:VoltVision-Spark-Alerts"
 AWS_REGION = "ap-southeast-2"
 
 # Replace with your actual AWS Keys
-AWS_ACCESS_KEY_ID = "YOUR_AWS_ACCESS_KEY"
-AWS_SECRET_ACCESS_KEY = "YOUR_AWS_SECRET_ACCESS_KEY"
+AWS_ACCESS_KEY_ID = "YOUR_AWS_ACCESS_KEY_ID "
+AWS_SECRET_ACCESS_KEY = "YOUR_AWS_SECRET_ACCESS_KEY_ID "
 
 # Initialize AWS SNS Client
 sns_client = boto3.client(
@@ -40,24 +40,23 @@ while True:
     if not ret:
         break
 
-    # Convert BGR to HSV
+    # Convert BGR frame to HSV color space
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # HSV Color range for bright sparks
-    lower_bound = np.array([0, 0, 250])
-    upper_bound = np.array([180, 80, 255])
+    # Fire / Flame Color HSV Thresholds
+    lower_bound = np.array([0, 120, 180])
+    upper_bound = np.array([25, 255, 255])
 
-    # Create mask and apply blur to reduce noise
+    # Create binary mask and apply Gaussian Blur
     mask = cv2.inRange(hsv, lower_bound, upper_bound)
     mask = cv2.GaussianBlur(mask, (5, 5), 0)
 
     contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
     spark_detected = False
 
     for contour in contours:
         # Area threshold to filter out tiny room lights
-        if cv2.contourArea(contour) > 1000:
+        if cv2.contourArea(contour) > 500:
             spark_detected = True
             x, y, w, h = cv2.boundingRect(contour)
 
